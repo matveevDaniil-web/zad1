@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Новости{% endblock %}
+{% block content %}
+<h1>Новости компании</h1>
+
+<form method="get" style="margin: 1rem 0;">
+    <input type="text" name="search" placeholder="Поиск по названию..." value="{{ search_query }}" style="padding: 0.5rem; width: 200px;">
+    <button type="submit" class="btn">Найти</button>
+    <a href="?sort={% if current_sort == 'desc' %}asc{% else %}desc{% endif %}" class="btn">
+        Сортировка: {% if current_sort == 'desc' %}сначала старые{% else %}сначала новые{% endif %}
+    </a>
+</form>
+
+{% for item in news %}
+    <div class="news-card">
+        <h3><a href="{% url 'news_detail' item.id %}" style="color:#С0С0С0;">{{ item.title }}</a></h3>
+        <small>{{ item.pub_date|date:"d.m.Y H:i" }} | Автор: {{ item.author.username }}</small>
+        <p>{{ item.content|truncatewords:50 }}</p>
+    </div>
+{% empty %}
+    <p>Новостей не найдено.</p>
+{% endfor %}
+{% endblock %}

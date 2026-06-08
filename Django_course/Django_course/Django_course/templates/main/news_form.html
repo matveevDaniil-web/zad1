@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Сохранить</button>
+    <a href="{% url 'news_list' %}" class="btn" style="background: #555;">Отмена</a>
+</form>
+{% endblock %}

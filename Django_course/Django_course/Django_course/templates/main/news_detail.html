@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}{{ news.title }}{% endblock %}
+{% block content %}
+<h1>{{ news.title }}</h1>
+<p><small>{{ news.pub_date|date:"d.m.Y H:i" }} | Автор: {{ news.author.username }}</small></p>
+{% if news.image %}
+    <img src="{{ news.image.url }}" alt="{{ news.title }}" style="max-width: 100%; margin: 1rem 0;">
+{% endif %}
+<p>{{ news.content|linebreaks }}</p>
+
+<hr>
+<h3>Комментарии ({{ comments.count }})</h3>
+{% for comment in comments %}
+    <div style="background: #2c2c2c; padding: 0.5rem; margin-bottom: 0.5rem; border-radius: 5px;">
+        <strong>{{ comment.user.username }}</strong> <small>{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+        <p>{{ comment.text }}</p>
+    </div>
+{% empty %}
+    <p>Наши клиенты всегда возвращаются</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+    <h4>Добавить комментарий</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Отправить</button>
+    </form>
+{% else %}
+    <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить комментарий.</p>
+{% endif %}
+
+{% if user.is_staff or user == news.author %}
+    <div style="margin-top: 1rem;">
+        <a href="{% url 'news_edit' news.id %}" class="btn">Редактировать</a>
+        <a href="{% url 'news_delete' news.id %}" class="btn" style="background: #555;">Удалить</a>
+    </div>
+{% endif %}
+{% endblock %}

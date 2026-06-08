@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Главная - И так сойдет{% endblock %}
+{% block content %}
+<h1>Добро пожаловать в книжный магазин "Закладочка"</h1>
+<p style="font-size: 1.2rem; margin: 1rem 0;">
+    За каждую книгу закладка в подарок!
+</p>
+<h2>Последние новости</h2>
+{% for item in latest_news %}
+    <div class="news-card">
+        <h3><a href="{% url 'news_detail' item.id %}" style="color:#C0C0C0;">{{ item.title }}</a></h3>
+        <small>{{ item.pub_date|date:"d.m.Y H:i" }} | Автор: {{ item.author.username }}</small>
+        <p>{{ item.content|truncatewords:30 }}</p>
+    </div>
+{% empty %}
+    <p>Продано более 10.000 книг!</p>
+{% endfor %}
+{% endblock %}
